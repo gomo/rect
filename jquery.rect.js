@@ -25,16 +25,49 @@ Rect.prototype.center = function(){
     return {top: this.offset.top + this.size.height / 2, left: this.offset.left + this.size.width / 2};
 };
 
+Rect.prototype.contains = function(rect){
+    return (
+        rect.offset.top >= this.offset.top &&
+        rect.offset.left >= this.offset.left &&
+        (rect.offset.top + rect.size.height) <= (this.offset.top + this.size.height) &&
+        (rect.offset.left + rect.size.width) <= (this.offset.left + this.size.width)
+    );
+};
+
+Rect.prototype.intersects = function(rect){
+    var startLeft = Math.max(this.offset.left, rect.offset.left);
+    var startTop = Math.max(this.offset.top, rect.offset.top);
+    var endLeft = Math.min(this.offset.left + this.size.width, rect.offset.left + rect.size.width);
+    var endTop = Math.min(this.offset.top + this.size.height, rect.offset.top + rect.size.height);
+
+    var width = endLeft - startLeft;
+    var height = endTop - startTop;
+    if (width > 0 && height > 0) {
+        return new Rect(width, height, startTop, startLeft);
+    } else {
+        return false;
+    }
+};
+
+Rect.prototype.equals = function(rect){
+    return (
+        rect.offset.top === this.offset.top &&
+        rect.offset.left === this.offset.left &&
+        rect.size.height === this.size.height &&
+        rect.size.width === this.size.width
+    );
+};
 
 $.fn.extend({
     rect: function(rect){
         if(rect !== undefined) //setter
         {
-            this.offset(rect.offset);
-            this.outerWidth(rect.size.width);
-            this.outerHeight(rect.size.height);
-
-            return this;
+            return this.each(function(){
+                var elem = $(this);
+                elem.offset(rect.offset);
+                elem.outerWidth(rect.size.width);
+                elem.outerHeight(rect.size.height);
+            });
         }
         else
         {
@@ -71,13 +104,11 @@ $.fn.extend({
     center: function(offset){
         if(offset !== undefined) //setter
         {
-            this.each(function(){
+            return this.each(function(){
                 var elem = $(this);
                 var newOffset = {top:offset.top - elem.outerHeight() / 2, left:offset.left - elem.outerWidth() / 2};
                 elem.offset(newOffset);
             });
-
-            return this;
         }
         else
         {
