@@ -1,7 +1,7 @@
 ;(function($){
 "use strict";
 
-Rect = function(width, height, top, left){
+window.Rect = function(width, height, top, left){
     if(top === undefined)
     {
         top = 0;
