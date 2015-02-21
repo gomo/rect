@@ -1,3 +1,11 @@
+/**
+ * jQuery rect
+ * https://github.com/gomo/rect
+ * 
+ * Copyright (c) 2015 Masamoto Miyata
+ * Licensed under the MIT.
+ */
+
 ;(function($){
 "use strict";
 
