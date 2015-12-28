@@ -1,7 +1,7 @@
 /**
  * jQuery rect
  * https://github.com/gomo/rect
- * 
+ *
  * Copyright (c) 2015 Masamoto Miyata
  * Licensed under the MIT.
  */
@@ -10,6 +10,7 @@
 "use strict";
 
 window.Rect = function(width, height, top, left){
+    var self = this;
     if(top === undefined)
     {
         top = 0;
@@ -20,8 +21,17 @@ window.Rect = function(width, height, top, left){
         left = 0;
     }
 
-    this.size = {width: width, height: height};
-    this.offset = {top: top, left: left};
+    self.size = {width: width, height: height};
+    self.offset = {
+        top: top,
+        left: left,
+        bottom: function(){
+            return this.top + self.size.height;
+        },
+        right: function(){
+            return this.left + self.size.width;
+        }
+    };
 };
 
 //static
